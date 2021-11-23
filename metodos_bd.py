@@ -78,7 +78,9 @@ def gera_datas():
         dia = rd.randrange(1, 29)
     else:
         dia = rd.randrange(1, 31)
-    data_partida = dt.date(ano, mes, dia)
+
+    hora, minuto, segundo = gera_horario()
+    data_partida = dt.datetime(ano, mes, dia, hora, minuto, segundo)
 
     dia = dia + 1
     if (mes == 2):
@@ -95,7 +97,8 @@ def gera_datas():
         else:
             mes += 1
 
-    data_destino = dt.date(ano, mes, dia)
+    hora, minuto, segundo = gera_horario()
+    data_destino = dt.datetime(ano, mes, dia, hora, minuto, segundo)
 
     return str(data_partida), str(data_destino)
 
@@ -104,9 +107,7 @@ def gera_horario():
     minuto = rd.randrange(0, 60)
     segundo = rd.randrange(0, 60)
 
-    horario = dt.time(hora, minuto, segundo)
-
-    return str(horario)
+    return hora, minuto, segundo
 
 def insere_passagens(bd):
     cursor = bd.cursor()
@@ -167,13 +168,11 @@ def insere_voo(bd):
     while(aeroporto_destino == aeroporto_partida):
         aeroporto_destino = cod_aeroportos[rd.randrange(0, len(cod_aeroportos))]
     data_partida, data_destino = gera_datas()
-    horario_partida = gera_horario()
-    horario_destino = gera_horario()
 
-    voo = (piloto, aviao, aeroporto_partida, aeroporto_destino, data_partida, horario_partida, data_destino, horario_destino)
+    voo = (piloto, aviao, aeroporto_partida, aeroporto_destino, data_partida, data_destino)
 
     try:
-        sql = 'INSERT INTO voo (cod_piloto, num_serie_aviao, cod_aeroporto_partida, cod_aeroporto_destino, data_partida, horario_partida, data_destino, horario_destino) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)'
+        sql = 'INSERT INTO voo (cod_piloto, num_serie_aviao, cod_aeroporto_partida, cod_aeroporto_destino, data_partida, data_destino) VALUES (%s, %s, %s, %s, %s, %s)'
         cursor.execute(sql, voo)
 
     except mysql.connector.Error as error:
@@ -287,3 +286,5 @@ def get_assentosaviao(bd, num_serie_aviao):
     cursor.close()
 
     return cod_assentos
+
+gera_datas()

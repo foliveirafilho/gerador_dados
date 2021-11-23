@@ -31,7 +31,7 @@ def popula_bd(qtde_passageiros = 1000, qtde_pilotos = 20, qtde_aeroportos = 20, 
 
     fecha_bd(bd)
 
-if (len(sys.argv) == 0):
+if (len(sys.argv) == 1):
     popula_bd()
 
 elif (len(sys.argv) == 6):
