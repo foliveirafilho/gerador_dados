@@ -8,6 +8,8 @@ from metodos_bd import *
 def popula_bd(qtde_passageiros = 1000, qtde_pilotos = 20, qtde_aeroportos = 20, qtde_avioes = 30, qtde_voos = 30):
     bd = conecta_bd()
 
+    print('Iniciando inserção dos dados sintéticos...')
+
     for i in range(qtde_passageiros):
         passageiro = gera_passageiro()
         insere_passageiro(bd, passageiro)
@@ -28,6 +30,8 @@ def popula_bd(qtde_passageiros = 1000, qtde_pilotos = 20, qtde_aeroportos = 20, 
         insere_voo(bd)
 
     insere_passagens(bd)
+
+    print('Inserção finalizada!')
 
     fecha_bd(bd)
 

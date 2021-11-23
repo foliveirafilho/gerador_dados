@@ -6,7 +6,6 @@ from mysql.connector import errorcode
 # cria a conexão com o banco de dados local
 def conecta_bd(host='localhost', user='root', password='root', database='companhia_aerea'):
     bd = mysql.connector.connect(host=host, user=user, password=password, database=database)
-    print("Conexão ao banco de dados realizada!")
 
     return bd
 
@@ -289,5 +288,3 @@ def get_assentosaviao(bd, num_serie_aviao):
     cursor.close()
 
     return cod_assentos
-
-gera_datas()
