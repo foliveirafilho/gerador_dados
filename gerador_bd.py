@@ -18,9 +18,10 @@ def popula_bd(qtde_passageiros = 1000, qtde_pilotos = 20, qtde_aeroportos = 20, 
         piloto = gera_piloto()
         insere_piloto(bd, piloto)
 
-    for i in range(qtde_aeroportos):
-        aeroporto = gera_aeroporto()
-        insere_aeroporto(bd, aeroporto)
+    insere_aeroportos(bd)
+    #for i in range(qtde_aeroportos):
+        #aeroporto = gera_aeroporto()
+        #insere_aeroporto(bd, aeroporto)
 
     for i in range(qtde_avioes):
         aviao, assentos = gera_aviao()

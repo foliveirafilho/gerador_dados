@@ -123,3 +123,15 @@ def gera_aeroporto():
     aeroporto = (aeroporto_escolhido[cidade_escolhida], 'BR', estado_escolhido, cidade_escolhida)
     
     return aeroporto
+
+# dado o dicionario aeroportos, faz uma lista de tuplas com as informacoes dos aeroportos (nome, pais, estado, cidade)
+def formata_aeroportos():
+    aero = []
+
+    for estado in aeroportos.keys():
+        cidades = aeroportos[estado]
+        for cidade in cidades.keys():
+            aeroporto = cidades[cidade]
+            aero.append((aeroporto, 'BR', estado, cidade))
+
+    return aero

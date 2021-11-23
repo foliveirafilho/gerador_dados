@@ -2,6 +2,7 @@ import mysql.connector
 import random as rd
 import datetime as dt
 from mysql.connector import errorcode
+from gerador_aeroporto import formata_aeroportos
 
 # cria a conexão com o banco de dados local
 def conecta_bd(host='localhost', user='root', password='root', database='companhia_aerea'):
@@ -47,6 +48,26 @@ def insere_aeroporto(bd, aeroporto):
     cursor.close()
     bd.commit()
 
+# insere todos os aeroportos definidos no arquivo gerador_aeroporto.py
+def insere_aeroportos(bd):
+    cursor = bd.cursor()
+
+    aeroportos = formata_aeroportos()
+
+    for aeroporto in aeroportos:
+        try:
+            sql = 'INSERT INTO aeroporto (nome, pais, estado, cidade) VALUES (%s, %s, %s, %s)'
+            cursor.execute(sql, aeroporto)
+
+        except mysql.connector.IntegrityError as error:
+                print("Entrada duplicada para nome do aeroporto!")
+
+        except mysql.connector.Error as error:
+                print(error)
+
+    cursor.close()
+    bd.commit()
+
 # insere um passageiro ao banco de dados com as informações passadas por parâmetro
 def insere_passageiro(bd, passageiro):
     cursor = bd.cursor()
@@ -86,7 +107,7 @@ def gera_datas():
         dia = rd.randrange(1, 31)
 
     hora, minuto, segundo = gera_horario()
-    data_partida = dt.datetime(ano, mes, dia, hora, minuto, segundo)
+    data_horario_partida = dt.datetime(ano, mes, dia, hora, minuto, segundo)
 
     dia = dia + 1
     if (mes == 2):
@@ -104,9 +125,9 @@ def gera_datas():
             mes += 1
 
     hora, minuto, segundo = gera_horario()
-    data_destino = dt.datetime(ano, mes, dia, hora, minuto, segundo)
+    data_horario_destino = dt.datetime(ano, mes, dia, hora, minuto, segundo)
 
-    return str(data_partida), str(data_destino)
+    return str(data_horario_partida), str(data_horario_destino)
 
 # gera um horario e retorna hora, minuto e segundo
 def gera_horario():
@@ -178,12 +199,12 @@ def insere_voo(bd):
     aeroporto_destino = cod_aeroportos[rd.randrange(0, len(cod_aeroportos))]
     while(aeroporto_destino == aeroporto_partida):
         aeroporto_destino = cod_aeroportos[rd.randrange(0, len(cod_aeroportos))]
-    data_partida, data_destino = gera_datas()
+    data_horario_partida, data_horario_destino = gera_datas()
 
-    voo = (piloto, aviao, aeroporto_partida, aeroporto_destino, data_partida, data_destino)
+    voo = (piloto, aviao, aeroporto_partida, aeroporto_destino, data_horario_partida, data_horario_destino)
 
     try:
-        sql = 'INSERT INTO voo (cod_piloto, num_serie_aviao, cod_aeroporto_partida, cod_aeroporto_destino, data_partida, data_destino) VALUES (%s, %s, %s, %s, %s, %s)'
+        sql = 'INSERT INTO voo (cod_piloto, num_serie_aviao, cod_aeroporto_partida, cod_aeroporto_destino, data_horario_partida, data_horario_destino) VALUES (%s, %s, %s, %s, %s, %s)'
         cursor.execute(sql, voo)
 
     except mysql.connector.Error as error:
