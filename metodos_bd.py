@@ -3,15 +3,18 @@ import random as rd
 import datetime as dt
 from mysql.connector import errorcode
 
+# cria a conexão com o banco de dados local
 def conecta_bd(host='localhost', user='root', password='root', database='companhia_aerea'):
     bd = mysql.connector.connect(host=host, user=user, password=password, database=database)
     print("Conexão ao banco de dados realizada!")
 
     return bd
 
+# fecha a conexão com o bd
 def fecha_bd(bd):
     bd.close()
 
+# insere um avião ao banco de dados com as informações passadas por parâmetro
 def insere_aviao(bd, aviao, assentos):
     cursor = bd.cursor()
 
@@ -28,6 +31,7 @@ def insere_aviao(bd, aviao, assentos):
     cursor.close()
     bd.commit()
 
+# insere um aeroporto ao banco de dados com as informações passadas por parâmetro
 def insere_aeroporto(bd, aeroporto):
     cursor = bd.cursor()
 
@@ -44,6 +48,7 @@ def insere_aeroporto(bd, aeroporto):
     cursor.close()
     bd.commit()
 
+# insere um passageiro ao banco de dados com as informações passadas por parâmetro
 def insere_passageiro(bd, passageiro):
     cursor = bd.cursor()
 
@@ -57,6 +62,7 @@ def insere_passageiro(bd, passageiro):
     cursor.close()
     bd.commit()
 
+# insere um piloto ao banco de dados com as informações passadas por parâmetro
 def insere_piloto(bd, piloto):
     cursor = bd.cursor()
 
@@ -70,6 +76,7 @@ def insere_piloto(bd, piloto):
     cursor.close()
     bd.commit()
 
+# gera um timestamp de data_partida e data_destino para inserir no voo
 def gera_datas():
     ano = rd.randrange(2022, 2024)
     mes = rd.randrange(1, 13)
@@ -102,6 +109,7 @@ def gera_datas():
 
     return str(data_partida), str(data_destino)
 
+# gera um horario e retorna hora, minuto e segundo
 def gera_horario():
     hora = rd.randrange(0, 24)
     minuto = rd.randrange(0, 60)
@@ -109,6 +117,8 @@ def gera_horario():
 
     return hora, minuto, segundo
 
+# pega todos os voos cadastrados no bd, gera a quantidade de assentos que serão ocupados,
+# escolhe os passageiros que ocuparão os assentos e insere no banco de dados
 def insere_passagens(bd):
     cursor = bd.cursor()
 
@@ -155,6 +165,8 @@ def insere_passagens(bd):
     cursor.close()
     bd.commit()
 
+# escolhe um piloto, aviao, aeroporto de partida e de chegada (diferentes) e gera datas de partida e de destino
+# e as insere no banco de dados
 def insere_voo(bd):
     cursor = bd.cursor()
 
@@ -181,21 +193,7 @@ def insere_voo(bd):
     cursor.close()
     bd.commit()
 
-def get_assentos(bd):
-    cursor = bd.cursor()
-
-    sql = 'SELECT codigo FROM assento'
-    cursor.execute(sql)
-
-    cod_assentos = []
-
-    for codigo in cursor:
-        cod_assentos.append(codigo[0])
-
-    cursor.close()
-
-    return cod_assentos
-
+# retorna o rg de todos os passageiros cadastrados no banco
 def get_passageiros(bd):
     cursor = bd.cursor()
 
@@ -211,6 +209,7 @@ def get_passageiros(bd):
 
     return rg_passageiros
 
+# retorna o codigo de todos os pilotos cadastrados no banco
 def get_pilotos(bd):
     cursor = bd.cursor()
 
@@ -226,6 +225,7 @@ def get_pilotos(bd):
 
     return cod_pilotos
 
+# retorna o num_serie de todos os avioes cadastrados no banco
 def get_avioes(bd):
     cursor = bd.cursor()
 
@@ -241,6 +241,7 @@ def get_avioes(bd):
 
     return numserie_avioes
 
+# retorna o codigo de todos os aeroportos cadastrados no banco
 def get_aeroportos(bd):
     cursor = bd.cursor()
 
@@ -256,6 +257,7 @@ def get_aeroportos(bd):
 
     return cod_aeroportos
 
+# retorna os codigos dos voos, num_serie e quantidade de assentos de todos os avioes cadastrados no banco
 def get_voos(bd):
     cursor = bd.cursor()
 
@@ -272,6 +274,7 @@ def get_voos(bd):
 
     return info_voos
 
+# retorna o codigo de todos os assentos de um determinado aviao cadastrado no banco
 def get_assentosaviao(bd, num_serie_aviao):
     cursor = bd.cursor()
 

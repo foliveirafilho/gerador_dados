@@ -1,5 +1,6 @@
 import random as rd
 
+# dicionario com todos os aeroportos do Brasil por estados e cidades
 aeroportos = {
     'AC': {
         'RBR': 'Aeroporto Internacional de Rio Branco/Placido de Castro', 
