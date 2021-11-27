@@ -31,23 +31,6 @@ def insere_aviao(bd, aviao, assentos):
     cursor.close()
     bd.commit()
 
-# insere um aeroporto ao banco de dados com as informações passadas por parâmetro
-def insere_aeroporto(bd, aeroporto):
-    cursor = bd.cursor()
-
-    try:
-        sql = 'INSERT INTO aeroporto (nome, pais, estado, cidade) VALUES (%s, %s, %s, %s)'
-        cursor.execute(sql, aeroporto)
-
-    except mysql.connector.IntegrityError as error:
-            print("Entrada duplicada para nome do aeroporto!")
-
-    except mysql.connector.Error as error:
-            print(error)
-
-    cursor.close()
-    bd.commit()
-
 # insere todos os aeroportos definidos no arquivo gerador_aeroporto.py
 def insere_aeroportos(bd):
     cursor = bd.cursor()
@@ -109,22 +92,30 @@ def gera_datas():
     hora, minuto, segundo = gera_horario()
     data_horario_partida = dt.datetime(ano, mes, dia, hora, minuto, segundo)
 
-    dia = dia + 1
-    if (mes == 2):
-        if (dia >= 29):
+    hora += rd.randrange(2, 13)
+
+    if(hora >= 24):
+        dia = dia + 1
+        if (mes == 2):
+            if (dia >= 29):
+                dia = 1
+                mes += 1
+        
+        elif (dia >= 31):
             dia = 1
-            mes += 1
-    
-    elif (dia >= 31):
-        dia = 1
-        if (mes == 12):
-            mes = 1
-            ano += 1
+            if (mes == 12):
+                mes = 1
+                ano += 1
 
-        else:
-            mes += 1
+            else:
+                mes += 1
 
-    hora, minuto, segundo = gera_horario()
+        if (hora == 24):
+            hora = 0
+
+        elif (hora > 24):
+            hora -= 24
+
     data_horario_destino = dt.datetime(ano, mes, dia, hora, minuto, segundo)
 
     return str(data_horario_partida), str(data_horario_destino)
